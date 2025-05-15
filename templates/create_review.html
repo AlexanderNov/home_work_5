@@ -1,0 +1,56 @@
+<!-- templates/create_review.html -->
+{% extends "base.html" %}
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="review-card p-4">
+                <h2 class="mb-4">Write a Review</h2>
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+
+                    <div class="mb-3">
+                        {{ form.product_name.label(class="form-label") }}
+                        {{ form.product_name(class="form-control") }}
+                        {% for error in form.product_name.errors %}
+                            <div class="invalid-feedback d-block">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.pros.label(class="form-label") }}
+                                {{ form.pros(class="form-control", rows=4) }}
+                                {% for error in form.pros.errors %}
+                                    <div class="invalid-feedback d-block">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ form.cons.label(class="form-label") }}
+                                {{ form.cons(class="form-control", rows=4) }}
+                                {% for error in form.cons.errors %}
+                                    <div class="invalid-feedback d-block">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        {{ form.opinion.label(class="form-label") }}
+                        {{ form.opinion(class="form-control", rows=4) }}
+                        {% for error in form.opinion.errors %}
+                            <div class="invalid-feedback d-block">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="d-grid">
+                        {{ form.submit(class="btn btn-primary") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

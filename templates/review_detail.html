@@ -1,0 +1,122 @@
+<!-- templates/review_detail.html -->
+{% extends "base.html" %}
+{% block content %}
+    <div class="review-card p-4 mb-4">
+        <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+                <h2 class="h4 mb-1">{{ review.product_name }}</h2>
+                <small class="text-muted">
+                    By {{ review.author.username }} · {{ review.created_at.strftime('%b %d, %Y') }}
+                </small>
+            </div>
+            {% if current_user == review.author %}
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle"
+                            type="button"
+                            data-bs-toggle="dropdown">
+                        Actions
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item"
+                               href="{{ url_for('edit_review', id=review.id) }}">
+                                Edit
+                            </a>
+                        </li>
+                        <li>
+                            <form method="POST"
+                                  action="{{ url_for('delete_review', id=review.id) }}">
+                                <button type="submit"
+                                        class="dropdown-item text-danger">
+                                    Delete
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title text-success">👍 Pros</h5>
+                        <p class="card-text">{{ review.pros }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title text-danger">👎 Cons</h5>
+                        <p class="card-text">{{ review.cons }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">💡 Overall Opinion</h5>
+                        <p class="card-text">{{ review.opinion }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4 vote-buttons">
+            <form method="POST"
+                  action="{{ url_for('vote', id=review.id, vote_type='like') }}"
+                  class="d-inline">
+                <button type="submit"
+                        class="btn btn-success">
+                    👍 Like ({{ review.likes }})
+                </button>
+            </form>
+            <form method="POST"
+                  action="{{ url_for('vote', id=review.id, vote_type='dislike') }}"
+                  class="d-inline ms-2">
+                <button type="submit"
+                        class="btn btn-danger">
+                    👎 Dislike ({{ review.dislikes }})
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="comment-section mt-4">
+        <h5 class="mb-3">💬 Comments ({{ review.comments|length }})</h5>
+
+        {% if current_user.is_authenticated %}
+            <form method="POST" action="{{ url_for('add_comment', id=review.id) }}">
+                {{ form.hidden_tag() }}
+                <div class="mb-3">
+                    {{ form.text(class="form-control", placeholder="Write your comment...", rows=3) }}
+                </div>
+                {{ form.submit(class="btn btn-primary") }}
+            </form>
+        {% endif %}
+
+        <div class="mt-4">
+            {% for comment in review.comments %}
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6 class="card-subtitle mb-2 text-muted">
+                                    {{ comment.author.username }}
+                                </h6>
+                                <p class="card-text">{{ comment.text }}</p>
+                            </div>
+                            <small class="text-muted">
+                                {{ comment.created_at.strftime('%b %d, %H:%M') }}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

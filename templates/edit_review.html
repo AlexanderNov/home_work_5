@@ -1,0 +1,40 @@
+<!-- templates/edit_review.html -->
+{% extends "base.html" %}
+{% block content %}
+    <h2>Edit Review</h2>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.product_name.label }}<br>
+            {{ form.product_name(size=100) }}<br>
+            {% for error in form.product_name.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div>
+            {{ form.pros.label }}<br>
+            {{ form.pros(rows=4, cols=50) }}<br>
+            {% for error in form.pros.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div>
+            {{ form.cons.label }}<br>
+            {{ form.cons(rows=4, cols=50) }}<br>
+            {% for error in form.cons.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div>
+            {{ form.opinion.label }}<br>
+            {{ form.opinion(rows=4, cols=50) }}<br>
+            {% for error in form.opinion.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div>
+            <button type="submit">Update Review</button>
+            <a href="{% if review %}{{ url_for('review_detail', id=review.id) }}{% else %}{{ url_for('index') }}{% endif %}">Cancel</a>
+        </div>
+    </form>
+{% endblock %}
